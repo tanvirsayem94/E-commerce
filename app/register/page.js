@@ -1,16 +1,46 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF, FaGithub } from "react-icons/fa";
 const page = () => {
-  const handleLoginForm = (event) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const handleLoginForm = async(event) => {
     event.preventDefault();
-    const form = event.target;
-    const name = form.name.value;
-    const email = form.email.value;
-    const password = form.password.value;
-    console.log(name,email, password);
+    setError('')
+    if(!name || !email || !password){
+      setError('All input is neccerssary')
+    }
+    
+    if(error){
+      console.log(error);
+    }
+    try {
+      const res = await fetch("api/register",{
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          name,
+          email,
+          password,
+        })
+      })
+      if(res.ok){
+        event.target.reset();
+        router.push('/')
+      }
+    } catch (error) {
+      
+    }
   };
+  
 
   return (
     <div className="w-5/6 mx-auto h-[75vh] mt-10 rounded-3xl shadow-2xl shadow-black overflow-hidden">
@@ -38,6 +68,7 @@ const page = () => {
           <p className="text-center mb-5">or use your email password</p>
           <form onSubmit={handleLoginForm} className="grid gap-5">
             <input
+              onChange={(e)=>setName(e.target.value)}
               type="text"
               name="name"
               id=""
@@ -45,17 +76,22 @@ const page = () => {
               placeholder="Name"
             />
             <input
+              onChange={(e)=>setEmail(e.target.value)}
               type="email"
               name="email"
               className="bg-slate-200 rounded-md pl-2 py-2"
               placeholder="Email"
             />
             <input
+              onChange={(e)=>setPassword(e.target.value)}
               type="password"
               name="password"
               className="bg-slate-200 rounded-md pl-2 py-2"
               placeholder="Password"
             />
+            {
+              error && <div className="text-red-500">{error}</div>
+            }
             <div className="mx-auto">
               <button className="text-white text-2xl py-1 mt-10 px-10 bg-[#4B3A9D] rounded-md font-semibold font-mono">
                 Sign in

@@ -1,13 +1,20 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF, FaGithub } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/slice";
 const page = () => {
+  const [email, setEmail] = useState("")
+  const dispatch = useDispatch();
   const handleLoginForm = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
+    setEmail(email)
+    dispatch(addUser(email))
     console.log(name,email, password);
   };
 
