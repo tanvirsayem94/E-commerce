@@ -15,12 +15,30 @@ const page = () => {
     setError('')
     if(!name || !email || !password){
       setError('All input is neccerssary')
+      return;
     }
-    
-    if(error){
-      console.log(error);
-    }
+    console.log({
+      name,
+      email,
+      password,
+  })
     try {
+      
+      const existRes = await fetch("api/userExist",{
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        
+        body: JSON.stringify( { email } ),
+      })
+      const {user} = await existRes.json()
+      console.log(user);
+      if(user){
+        setError('user already exist')
+        console.log(error)
+        return;
+      }
       const res = await fetch("api/register",{
         method: "POST",
         headers:{
@@ -37,7 +55,7 @@ const page = () => {
         router.push('/')
       }
     } catch (error) {
-      
+      console.log(error)
     }
   };
   

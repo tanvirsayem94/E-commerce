@@ -3,19 +3,31 @@ import Link from "next/link";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF, FaGithub } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { addUser } from "../redux/slice";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const page = () => {
   const [email, setEmail] = useState("")
-  const dispatch = useDispatch();
-  const handleLoginForm = (event) => {
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const router = useRouter()
+  const handleLoginForm = async(event) => {
     event.preventDefault();
     const form = event.target;
-    const email = form.email.value;
-    const password = form.password.value;
-    setEmail(email)
-    dispatch(addUser(email))
-    console.log(name,email, password);
+    try {
+      const res = await signIn('credentials',{
+        email,
+        password,
+        redirect: false,
+      });
+      if(res.error){
+        setError("invalid credentials")
+        return;
+      }
+      router.replace('/')
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -31,17 +43,22 @@ const page = () => {
           <p className="text-center mb-5">or use your email password</p>
           <form onSubmit={handleLoginForm} className="grid gap-5">
             <input
+            onChange={(e)=>setEmail(e.target.value)}
               type="email"
               name="email"
               className="bg-slate-200 rounded-md pl-2 py-2"
               placeholder="Email"
             />
             <input
+            onChange={(e)=>setPassword(e.target.value)}
               type="password"
               name="password"
               className="bg-slate-200 rounded-md pl-2 py-2"
               placeholder="Password"
             />
+            {
+              error && <p className="text-red-500">{error}</p>
+            }
             <div className="mx-auto">
               <button className="text-white text-2xl py-1 mt-10 px-10 bg-[#4B3A9D] rounded-md font-semibold font-mono">
                 Sign in
