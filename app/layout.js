@@ -13,9 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="w-11/12 mx-auto" data-theme="light" id="tanvir" >
       <body className={inter.className} >
-      <Navbar/>
+      
       <Providers>
         <AuthProvider>
+        <Navbar/>
         {children}
         </AuthProvider>
       </Providers>

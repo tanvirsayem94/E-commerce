@@ -1,8 +1,12 @@
-'use client'
+"use client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { CiUser } from "react-icons/ci";
 import { TiShoppingCart } from "react-icons/ti";
+import { FaRegUserCircle } from "react-icons/fa";
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <div>
       <div className="navbar bg-slate-600 bg-opacity-15">
@@ -43,10 +47,13 @@ const Navbar = () => {
                 </ul>
               </li>
               <li>
-                <a>
+                <Link href={"login"}>
                   <CiUser />
                   Login
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link href={"/register"}>SignUp</Link>
               </li>
             </ul>
           </div>
@@ -71,22 +78,52 @@ const Navbar = () => {
               </details>
             </li>
             <li>
-              <Link href={"/login"}>
-                <CiUser />
-                Login
-              </Link>
+              {!session && (
+                <Link href={"/login"}>
+                  <CiUser />
+                  Login
+                </Link>
+              )}
             </li>
             <li className="flex justify-center items-center">|</li>
             <li>
-              <a>SignUp</a>
+              {session ? (
+                <button onClick={() => signOut()}>SignOut</button>
+              ) : (
+                <Link href={"/register"}>SignUp</Link>
+              )}
             </li>
           </ul>
         </div>
-        <div className="navbar-end">
+
+        
+        <div className="navbar-end flex gap-5">
           <div className="indicator">
             <span className="indicator-item badge badge-secondary">99+</span>
-            <button className="text-4xl"><TiShoppingCart /></button>
+            <button className="text-4xl">
+              <TiShoppingCart />
+            </button>
           </div>
+          {
+            session &&
+            <div className="dropdown dropdown-hover ">
+            <div tabIndex={0} role="button" className=" w-10 h-10 rounded-full flex justify-center items-center bg-white">
+            <FaRegUserCircle className="text-4xl text-center"/>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 -right-14"
+            >
+              <li>
+                <p className="text-center">{session && session?.user?.name}</p>
+              </li>
+              <li>
+                <a>Item 2</a>
+              </li>
+            </ul>
+          </div>
+          }
+         
           
         </div>
       </div>

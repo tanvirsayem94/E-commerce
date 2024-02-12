@@ -61,9 +61,9 @@ const page = () => {
   
 
   return (
-    <div className="w-5/6 mx-auto h-[75vh] mt-10 rounded-3xl shadow-2xl shadow-black overflow-hidden">
-      <div className="flex">
-      <div className="bg-[#4B3A9D]   w-5/12 rounded-r-full overflow-hidden text-center grid items-center justify-center">
+    <div className="md:w-5/6 mx-auto h-[75vh] mt-10 rounded-3xl shadow-2xl shadow-black overflow-hidden">
+      <div className="flex ">
+      <div className="bg-[#4B3A9D]  w-5/12 rounded-r-full overflow-hidden text-center hidden md:grid items-center justify-center">
           <div>
             <h1 className="text-center text-white font-semibold text-3xl">
               Hello, Friend!
@@ -76,7 +76,7 @@ const page = () => {
             
           </div>
         </div>
-        <div className=" w-3/6 mx-auto px-4 py-10">
+        <div className=" md:w-3/6 mx-auto px-4 py-10 w-11/12">
           <h1 className="text-4xl text-center mb-5  font-semibold">Sign Up</h1>
           <div className="flex gap-5 justify-center mb-5">
             <div className="border border-slate-200   px-2 py-2 rounded-md"><FaGoogle /></div>
