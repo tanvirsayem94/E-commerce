@@ -4,24 +4,23 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF, FaGithub } from "react-icons/fa";
+import { TbFidgetSpinner } from "react-icons/tb";
 const page = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const [loader, setLoader] = useState(true);
   const handleLoginForm = async(event) => {
     event.preventDefault();
+    setLoader(false)
     setError('')
     if(!name || !email || !password){
       setError('All input is neccerssary')
+      setLoader(true)
       return;
     }
-    console.log({
-      name,
-      email,
-      password,
-  })
     try {
       
       const existRes = await fetch("api/userExist",{
@@ -33,10 +32,9 @@ const page = () => {
         body: JSON.stringify( { email } ),
       })
       const {user} = await existRes.json()
-      console.log(user);
       if(user){
         setError('user already exist')
-        console.log(error)
+        setLoader(true)
         return;
       }
       const res = await fetch("api/register",{
@@ -51,10 +49,12 @@ const page = () => {
         })
       })
       if(res.ok){
+        setLoader(true)
         event.target.reset();
         router.push('/')
       }
     } catch (error) {
+      setLoader(true)
       console.log(error)
     }
   };
@@ -112,7 +112,9 @@ const page = () => {
             }
             <div className="mx-auto">
               <button className="text-white text-2xl py-1 mt-10 px-10 bg-[#4B3A9D] rounded-md font-semibold font-mono">
-                Sign in
+                {
+                  !loader ? <TbFidgetSpinner className="animate-spin"/> : "Sign Up"
+                }
               </button>
             </div>
           </form>

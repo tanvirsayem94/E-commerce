@@ -6,14 +6,18 @@ import { FaFacebookF, FaGithub } from "react-icons/fa";
 import { addUser } from "../redux/slice";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { TbFidgetSpinner } from "react-icons/tb";
+
 
 const page = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [loader, setLoader] = useState(true);
   const router = useRouter()
   const handleLoginForm = async(event) => {
     event.preventDefault();
+    setLoader(false)
     const form = event.target;
     try {
       const res = await signIn('credentials',{
@@ -22,11 +26,17 @@ const page = () => {
         redirect: false,
       });
       if(res.error){
+        console.log(res.error )
+        console.log(res)
         setError("invalid credentials")
+        setLoader(true)
+        
         return;
       }
+      console.log(res)
       router.replace('/')
     } catch (error) {
+      setLoader(true)
       console.log(error)
     }
   };
@@ -62,7 +72,9 @@ const page = () => {
             }
             <div className="mx-auto">
               <button className="text-white text-2xl py-1 mt-10 px-10 bg-[#4B3A9D] rounded-md font-semibold font-mono">
-                Sign in
+                 {
+                  !loader ? <TbFidgetSpinner className="animate-spin"/> : "Sign in"
+                }
               </button>
             </div>
           </form>

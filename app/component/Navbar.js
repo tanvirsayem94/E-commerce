@@ -4,9 +4,23 @@ import Link from "next/link";
 import { CiUser } from "react-icons/ci";
 import { TiShoppingCart } from "react-icons/ti";
 import { FaRegUserCircle } from "react-icons/fa";
+import Cookies from 'js-cookie';
+import { useEffect } from "react";
 const Navbar = () => {
   const { data: session } = useSession();
-
+  const cookieValue = Cookies.get('token');
+  
+  
+  if(cookieValue){
+    fetch("api/pepole",{
+      method: "GET",
+      headers:{
+        "Content-Type": "application/json",
+        authorization: `Bearer ${cookieValue}`,
+      },
+    })
+    console.log(cookieValue)
+  }
   return (
     <div>
       <div className="navbar bg-slate-600 bg-opacity-15">

@@ -3,6 +3,7 @@ import User from "@/models/user";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 const authOptions = {
     
@@ -21,6 +22,7 @@ const authOptions = {
                     }
                     const passwordMatch = await bcrypt.compare(password, user.password);
                     if(!passwordMatch){
+                        
                         return null;
                     }
                     return user;
