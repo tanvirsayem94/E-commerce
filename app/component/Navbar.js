@@ -5,11 +5,22 @@ import { CiUser } from "react-icons/ci";
 import { TiShoppingCart } from "react-icons/ti";
 import { FaRegUserCircle } from "react-icons/fa";
 import Cookies from 'js-cookie';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const Navbar = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession();
-  const cookieValue = Cookies.get('token');
   
+  const cookieValue = Cookies.get('token');
+  if(session){
+    if(!cookieValue){
+      signOut()
+    }
+  }
+  if(cookieValue){
+    if(!session){
+      Cookies.remove('token')
+    }
+  }
   
   if(cookieValue){
     fetch("api/pepole",{
@@ -79,17 +90,10 @@ const Navbar = () => {
               <Link href={"/"}>Home</Link>
             </li>
             <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
+              <Link href={"/dashboard"}>Dashboard</Link>
+            </li>
+            <li>
+              <Link href={"/seller"}>Become a seller</Link>
             </li>
             <li>
               {!session && (

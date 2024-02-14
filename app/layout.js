@@ -11,13 +11,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="w-11/12 mx-auto" data-theme="light" id="tanvir" >
+    <html lang="en" data-theme="light" >
       <body className={inter.className} >
-      
       <Providers>
         <AuthProvider>
         <Navbar/>
+        <div className="w-11/12 mx-auto">
         {children}
+        </div>
+        
         </AuthProvider>
       </Providers>
         </body>

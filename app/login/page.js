@@ -20,24 +20,57 @@ const page = () => {
     setLoader(false)
     const form = event.target;
     try {
-      const res = await signIn('credentials',{
-        email,
-        password,
-        redirect: false,
-      });
-      if(res.error){
-        console.log(res.error )
-        console.log(res)
-        setError("invalid credentials")
-        setLoader(true)
+      const result = await fetch("api/login",{
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body:JSON.stringify({
+          email,
+          password,
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.ok){
+          setLoader(true)
+          event.target.reset();
+          const res =  signIn('credentials',{
+            email,
+            password,
+            redirect: false,
+          });
+          
+          router.push('/')
+        }
+        setError(data.message)
+      })
+      console.log(result)
+      if(result.ok){
         
-        return;
+       
       }
-      console.log(res)
-      router.replace('/')
-    } catch (error) {
+    }
+      // hello this trial version
+    //   const res = await signIn('credentials',{
+    //     email,
+    //     password,
+    //     redirect: false,
+    //   });
+    //   if(res.error){
+    //     console.log(res.error )
+    //     console.log(res)
+    //     setError("invalid credentials")
+    //     setLoader(true)
+        
+    //     return;
+    //   }
+    //   console.log(res)
+    //   router.replace('/')
+    // } 
+    catch (error) {
       setLoader(true)
-      console.log(error)
+      
     }
   };
 
