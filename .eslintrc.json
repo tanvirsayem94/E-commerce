@@ -1,3 +1,26 @@
 {
-  "extends": "next/core-web-vitals"
+  
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier"
+  ],
+  "plugins": ["react-hooks"],
+  "rules": {
+    // Add or modify your ESLint rules here
+
+    // Example rules:
+    "react/react-in-jsx-scope": "off", // Next.js doesn't require importing React in each file
+    "react/prop-types": "off", // PropTypes are not needed if you're not using TypeScript
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Automatically detect the React version
+    }
+  }
+  
 }

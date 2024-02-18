@@ -11,27 +11,25 @@ const Navbar = () => {
   const { data: session } = useSession();
   
   const cookieValue = Cookies.get('token');
+  
   if(session){
     if(!cookieValue){
       signOut()
     }
   }
-  if(cookieValue){
-    if(!session){
-      Cookies.remove('token')
-    }
+  const logOut = ()=>{
+    signOut()
+    Cookies.remove('token')
   }
-  
-  if(cookieValue){
-    fetch("api/pepole",{
-      method: "GET",
-      headers:{
-        "Content-Type": "application/json",
-        authorization: `Bearer ${cookieValue}`,
-      },
-    })
-    console.log(cookieValue)
-  }
+  // if(cookieValue){
+  //   fetch("api/pepole",{
+  //     method: "GET",
+  //     headers:{
+  //       "Content-Type": "application/json",
+  //       authorization: `Bearer ${cookieValue}`,
+  //     },
+  //   })
+  // }
   return (
     <div>
       <div className="navbar bg-slate-600 bg-opacity-15">
@@ -106,7 +104,7 @@ const Navbar = () => {
             <li className="flex justify-center items-center">|</li>
             <li>
               {session ? (
-                <button onClick={() => signOut()}>SignOut</button>
+                <button onClick={() => logOut()}>SignOut</button>
               ) : (
                 <Link href={"/register"}>SignUp</Link>
               )}
@@ -125,12 +123,12 @@ const Navbar = () => {
           {
             session &&
             <div className="dropdown dropdown-hover ">
-            <div tabIndex={0} role="button" className=" w-10 h-10 rounded-full flex justify-center items-center bg-white">
+            <div tabIndex={0} role="button" className=" w-10 h-10 mr-6 rounded-full flex justify-center items-center bg-white">
             <FaRegUserCircle className="text-4xl text-center"/>
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40 -right-14"
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-28 right-14"
             >
               <li>
                 <p className="text-center">{session && session?.user?.name}</p>

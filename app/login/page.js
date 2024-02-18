@@ -51,23 +51,6 @@ const page = () => {
        
       }
     }
-      // hello this trial version
-    //   const res = await signIn('credentials',{
-    //     email,
-    //     password,
-    //     redirect: false,
-    //   });
-    //   if(res.error){
-    //     console.log(res.error )
-    //     console.log(res)
-    //     setError("invalid credentials")
-    //     setLoader(true)
-        
-    //     return;
-    //   }
-    //   console.log(res)
-    //   router.replace('/')
-    // } 
     catch (error) {
       setLoader(true)
       

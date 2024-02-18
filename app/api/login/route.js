@@ -18,12 +18,6 @@ export async function POST(req) {
     if (!passwordMatch) {
       return NextResponse.json({ message: "wrong password" }, { status: 500 });
     }
-    if(user && passwordMatch){
-        console.log('hello')
-    }
-    else{
-        console.log("not hello")
-    }
     const token = jwt.sign({ email }, "jwtsecret");
 
     const response = NextResponse.json(
