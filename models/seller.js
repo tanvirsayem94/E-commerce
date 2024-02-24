@@ -6,7 +6,8 @@ const sellerSchema = new mongoose.Schema(
     authorName: {type:String, required:true},
     companyName: {type:String, required:true},
     address: {type:String, required:true},
-    numbers: {type:Number, required:true}
+    numbers: {type:Number, required:true},
+    picture: {type:String, required:true}
   },
   {
     timestamps: true,

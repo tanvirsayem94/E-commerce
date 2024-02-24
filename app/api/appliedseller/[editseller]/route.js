@@ -4,17 +4,17 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { authorEmail, authorName, companyName, address, numbers } =
+    const { authorEmail, authorName, companyName, address, numbers,picture } =
       await req.json();
-      const mobileNumber = parseFloat(numbers)
-      console.log(mobileNumber)
+      
     await mongoDbConnect();
     await Seller.create({
       authorEmail,
       authorName,
       companyName,
       address,
-      numbers : mobileNumber,
+      numbers,
+      picture
     });
     const response = NextResponse.json(
       { msg: "successfully post seller application" },
@@ -22,6 +22,7 @@ export async function POST(req) {
     );
     return response;
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       { message: "An error occurred while posting seller application" },
       { status: 500 }

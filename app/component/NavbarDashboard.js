@@ -9,11 +9,11 @@ import Link from "next/link";
 const NavbarDashboard = () => {
     return (
         <div className="flex flex-col gap-5 bg-[#602BF8] w-44 h-[100vh] text-slate-400">
-            <div className="flex flex-col gap-5 pl-5 pt-20">
+            <div className="flex flex-col gap-5 pl-5 pt-20 pr-4">
             <Link className="flex gap-3  items-center" href={"/dashboard"}><MdSpaceDashboard/>Dashboard</Link>
-            <Link  className="flex gap-3  items-center" href={"/dashboard/requestedseller"}><RxDropdownMenu/>Seller</Link>
-            <Link className="flex gap-3  items-center" href={"/dashboard/application"}><AiOutlineTeam/>Application</Link>
-            <Link className="flex gap-3  items-center" href={"/dahsboard/records"}><MdDataThresholding/>Records</Link>
+            <Link  className="flex gap-3  items-center" href={"/dashboard/requestedseller"}><AiOutlineTeam/>Seller-Request</Link>
+            <Link className="flex gap-3  items-center" href={"/dashboard/postRequest"}><RxDropdownMenu/>Post-Request</Link>
+            <Link className="flex gap-3  items-center" href={"/dashboard/record"}><MdDataThresholding/>Records</Link>
             <Link className="flex gap-3  items-center" href={"/dashboard/topseller"}><FaUserGraduate/>Top-seller</Link>
             </div>
         </div>

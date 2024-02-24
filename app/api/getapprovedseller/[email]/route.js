@@ -2,25 +2,27 @@ import mongoDbConnect from "@/lib/mongo";
 import ApproveSeller from "@/models/approvedSeller";
 import { NextResponse } from "next/server";
 
-export async function POST(req) {
+export async function GET(req,content) {
   try {
     await mongoDbConnect();
-    const { authorEmail, authorName, companyName, address, numbers,picture } = await req.json();
+    const email = content.params.email;
+    const query = {authorEmail:email}
     
-    await mongoDbConnect();
-    await ApproveSeller.create({
-      authorEmail,
-      authorName,
-      companyName,
-      address,
-      numbers,
-      picture
-    });
+    const approvedSeller = await ApproveSeller.findOne(query);
+    if(approvedSeller){
+      const response = NextResponse.json(
+        {approvedSeller,ok:true},
+        { status: 201 }
+      );
+      return response;
+    }
     const response = NextResponse.json(
-      { msg: "successfully post seller application" },
+      {msg:"cannot find user",ok:false},
       { status: 201 }
     );
     return response;
+    
+    
   } catch (error) {
     return NextResponse.json(
       { msg: "some problem faced while searching sellers" },

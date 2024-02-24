@@ -13,7 +13,7 @@ const authOptions = {
       credentials: {},
 
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { email, password,brandName } = credentials;
         try {
           await mongoDbConnect();
           const user = await User.findOne({ email });
@@ -25,9 +25,6 @@ const authOptions = {
             return null;
           }
           const token = jwt.sign({ email }, "jwtsecret");
-
-          
-          
         //   return response;
           return user;
         } catch (error) {

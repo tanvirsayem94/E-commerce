@@ -9,13 +9,17 @@ import Formseller from "../component/Formseller";
 import getAllposts from "../getApi/getAllposts";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 // import React, { useState,useEffect } from 'react';
 // import { useSession } from "next-auth/react";
 const page = () => {
     const [seller,setSeller] = useState([])
+    const [exist,setExist] = useState([])
     const { data: session } = useSession();
     const[loading, setLoading] = useState(false)
+    const[loading2, setLoading2] = useState(false)
     const [clicker, setClicker] = useState(true)
+    const router = useRouter()
     useEffect(()=>{
         if(session){
             fetch("http://localhost:3000/api/appliedseller/"+session?.user?.email)
@@ -24,8 +28,24 @@ const page = () => {
         }
         
       },[session,clicker])
+    useEffect(()=>{
+        if(session){
+            fetch("http://localhost:3000/api/getapprovedseller/"+session?.user?.email)
+        .then(res =>res.json())
+        .then(data =>{setExist(data),setLoading2(true)})
+        }
+        
+      },[session,clicker])
     
-     
+     if(session && exist.ok && !seller.ok){
+        return (
+            <div className="bg-[#FEF1C5] grid items-center justify-center h-[90vh]">
+            <div className="text-center  grid items-center justify-center">
+                <h1 className="text-4xl text-center mx-auto">you are already a seller</h1>
+            </div>
+            
+        </div>)
+     }
     if(seller.ok){
         return(<div className="bg-[#FEF1C5] grid items-center justify-center h-[90vh]">
         <div className="text-center  grid items-center justify-center">
@@ -44,7 +64,7 @@ const page = () => {
     }
     
     
-        if(loading){
+        if(loading && loading2){
         return (
             <div className="bg-[#FEF1C5] h-[87vh] flex gap-80">
                 <div className="">

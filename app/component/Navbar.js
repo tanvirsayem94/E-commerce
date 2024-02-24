@@ -6,6 +6,7 @@ import { TiShoppingCart } from "react-icons/ti";
 import { FaRegUserCircle } from "react-icons/fa";
 import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
+import getAllposts from "../getApi/getAllposts";
 const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession();
@@ -17,10 +18,16 @@ const Navbar = () => {
       signOut()
     }
   }
+  // console.log(session)
   const logOut = ()=>{
     signOut()
     Cookies.remove('token')
   }
+  if(session){
+    const {data} =getAllposts(session.user.email)
+  }
+  const sayem = process.env.NEXT_PUBLIC_NEXAUTHSECRET
+  
   // if(cookieValue){
   //   fetch("api/pepole",{
   //     method: "GET",
@@ -92,6 +99,9 @@ const Navbar = () => {
             </li>
             <li>
               <Link href={"/seller"}>Become a seller</Link>
+            </li>
+            <li>
+              <Link href={"/product"}>Post Product</Link>
             </li>
             <li>
               {!session && (

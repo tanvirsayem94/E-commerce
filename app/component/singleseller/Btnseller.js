@@ -7,8 +7,7 @@ const Btnseller = ({ id, setClicker, data }) => {
   const router = useRouter();
 
   const handleApproved = async (currentData) => {
-    const { authorEmail, authorName, companyName, address, numbers } = currentData;
-    console.log(numbers)
+    const { authorEmail, authorName, companyName, address, numbers,picture } = currentData;
     if(numbers){
       const res = await fetch("http://localhost:3000/api/approvedseller", {
       method: "POST",
@@ -21,6 +20,7 @@ const Btnseller = ({ id, setClicker, data }) => {
         companyName,
         address,
         numbers,
+        picture
       }),
     });
     if (res.ok) {
@@ -33,7 +33,7 @@ const Btnseller = ({ id, setClicker, data }) => {
       result = await res.json();
       if (result) {
         alert("product deleted");
-        // setClicker(!clicker)
+        setClicker(false)
         router.push("/dashboard/requestedseller");
       }
     }
@@ -46,7 +46,7 @@ const Btnseller = ({ id, setClicker, data }) => {
     res = await res.json();
     if (res) {
       alert("product deleted");
-      // setClicker(!clicker)
+      setClicker(false)
       router.push("/dashboard/requestedseller");
     }
   };
