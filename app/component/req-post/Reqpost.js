@@ -5,14 +5,33 @@ import Modal from "../Modal";
 import Swal from "sweetalert2";
 import { useSession } from "next-auth/react";
 
+
 const Reqpost = ({index, item,setClicker,posts}) => {
+  let num = 0;
   const { data: session } = useSession();
 
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState("");
+    
     const handleModal = (id)=>{
         setId(id)
         setLoading(!loading)
+    }
+    
+    const handleApprove = async(id)=>{
+      const res =  fetch("http://localhost:3000/api/updatepostseller/"+id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              approved: true,
+            }),
+            
+          });
+          if(res){
+            setClicker(false)
+          }
     }
     const handleDelete = async(id)=>{
       const swalWithBootstrapButtons =  Swal.mixin({
@@ -34,36 +53,25 @@ const Reqpost = ({index, item,setClicker,posts}) => {
       }).then((result) => {
         let field = document.getElementById("swal2-input")
         if (result.isConfirmed) {
-          
-          fetch("http://localhost:3000/api/updatepostseller/"+id, {
-            method: "delete",
-          })
-          .then(result => result.json())
-          .then(data => {
-            if(data.result.deletedCount){
-              const res =  fetch("http://localhost:3000/api/updatepostseller/"+id, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                feedback: field?.value,
-                authorEmail:session?.user?.email, 
-              }),
-              
-            });
-            setClicker(false)
-            if(res.ok){
+          const res =  fetch("http://localhost:3000/api/updatepostseller/"+id, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              feedback: field?.value,
+            }),
+            
+          });
+            
+            if(res){
+              setClicker(false)
               swalWithBootstrapButtons.fire({
                 title: "Deleted!",
                 text: "Your file has been deleted.",
                 icon: "success"
               });
             }
-              
-            }
-          })
-          
             
         } else if (
           /* Read more about handling dismissals below */
@@ -83,9 +91,9 @@ const Reqpost = ({index, item,setClicker,posts}) => {
     const time = formatedDateString.split(",")[1]
 
   return (
-    <tr className={`bg-white rounded-2xl ${!item?.productName && "hidden"}`}>
+    <tr className={`bg-white rounded-2xl ${item?.feedback && "hidden" || item?.approved && "hidden"}`}>
       <th>
-        {index + 1}
+        {num += 1}
       </th>
       <td>
         {item.productName}
@@ -95,7 +103,7 @@ const Reqpost = ({index, item,setClicker,posts}) => {
       <td className="text-sm">{date}</td>
       <td>{time}</td>
       <th>
-        <button className=" bg-[#FEF1C5] py-2 px-2 rounded-md text-sm">Approve</button>
+        <button className=" bg-[#FEF1C5] py-2 px-2 rounded-md text-sm" onClick={()=>handleApprove(item._id)}>Approve</button>
       </th>
       <th>
         <button className="bg-[#FEF1C5] py-2 px-2 rounded-md text-sm" onClick={()=>handleDelete(item._id)}>Decline</button>
@@ -105,8 +113,9 @@ const Reqpost = ({index, item,setClicker,posts}) => {
       <label htmlFor="my_modal_6" className="btn" onClick={()=>handleModal(item)}>See Details</label>
       </th>
         {
-            !loading && <Modal key={item._id} item={item} id={id} posts={posts} handleModal={handleModal}/>
+            !loading && <Modal key={item._id} item={item} id={id}  handleModal={handleModal}/>
         }
+        
     </tr>
   );
 };

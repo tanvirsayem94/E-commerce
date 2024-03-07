@@ -1,16 +1,20 @@
 import mongoDbConnect from "@/lib/mongo";
 import PostSeller from "@/models/postSeller";
-
 import { NextResponse } from "next/server";
-export async function POST(req,content){
+
+
+export async function PUT(req,content){
     try {
         
-        const id = content.params.id;
-        const {feedback,authorEmail} = await req.json();
-        console.log(feedback,authorEmail)
+            const id = content.params.id;
+        const query = {_id : id};
+        const payload = await req.json();
+        console.log(payload);
         await mongoDbConnect();
-            await PostSeller.create({feedback,authorEmail});
+            await PostSeller.findOneAndUpdate(query,payload);
            return NextResponse.json({msg:"successfully user created"},{status: 201})
+        
+        
         
     } catch (error) {
         console.log(error)
@@ -18,11 +22,19 @@ export async function POST(req,content){
     }
 }
 
-export async function DELETE(req,content){
-    const id = content.params.id;
-    const query = {_id:id}
-    await mongoDbConnect()
-    const result = await PostSeller.deleteOne(query)
-    return NextResponse.json({result},{success: true})
-  }
+export async function GET(req,content){
+    try {
+        
+        const email = content.params.id;
+        const popertyName = "approved"
+        await mongoDbConnect();
+           const product =  await PostSeller.find({authorEmail:email,[popertyName]:{$exists:false}}).sort({ createdAt: 1 });
+           return NextResponse.json(product)
+        
+    } catch (error) {
+        console.log(error)
+        return NextResponse.json({message:"An error occurred while registering the user"},{status: 500})
+    }
+}
+
 

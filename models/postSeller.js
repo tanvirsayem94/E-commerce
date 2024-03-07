@@ -17,6 +17,7 @@ const postSellerSchema = new mongoose.Schema(
     authorImage: {type:String},
     authorName: {type:String},
     feedback: {type:String},
+    approved:{type:Boolean}
   },
   {
     timestamps: true,

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const Modal = ({ item, id, posts, handleModal }) => {
+const Modal = ({ item, id, handleModal }) => {
  
   const {
     authorName,

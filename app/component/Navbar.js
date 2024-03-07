@@ -104,6 +104,9 @@ const Navbar = () => {
               <Link href={"/product"}>Post Product</Link>
             </li>
             <li>
+              <Link href={"/sellerboard"}>Seller</Link>
+            </li>
+            <li>
               {!session && (
                 <Link href={"/login"}>
                   <CiUser />
